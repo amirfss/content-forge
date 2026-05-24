@@ -10,7 +10,7 @@
 
 *Because creating content for 5 platforms shouldn't take 5 hours* ⏰
 
-[Live Demo](https://content-forge-92oi2p73q-jarwo-hokis-projects.vercel.app) • [Report Bug](https://github.com/amirfss/content-forge/issues) • [Request Feature](https://github.com/amirfss/content-forge/issues)
+[Live Demo](https://content-forge-qf0l3e8lb-amirfss-projects.vercel.app) • [Report Bug](https://github.com/amirfss/content-forge/issues) • [Request Feature](https://github.com/amirfss/content-forge/issues)
 
 </div>
 
@@ -111,7 +111,7 @@ const stack = {
 ## 🚀 Quick Start
 
 ### Try It Now (No Installation!)
-Visit: [content-forge-92oi2p73q-jarwo-hokis-projects.vercel.app](https://content-forge-92oi2p73q-jarwo-hokis-projects.vercel.app)
+Visit: [content-forge-qf0l3e8lb-amirfss-projects.vercel.app](https://content-forge-qf0l3e8lb-amirfss-projects.vercel.app)
 
 ### Run Locally
 
