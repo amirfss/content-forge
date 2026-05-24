@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Forge - AI-Powered Multi-Platform Content Generator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .input-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        input, select {
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            padding: 16px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .platform-card {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+        
+        .platform-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+        
+        .platform-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .platform-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            text-transform: capitalize;
+        }
+        
+        .platform-icon {
+            font-size: 28px;
+        }
+        
+        .platform-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .content-box {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #374151;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .content-box::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .content-box::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .content-box::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .btn-copy {
+            background: #10b981;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-copy:hover {
+            background: #059669;
+        }
+        
+        .btn-download {
+            background: #3b82f6;
+            color: white;
+            flex: 1;
+        }
+        
+        .btn-download:hover {
+            background: #2563eb;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #6b7280;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #10b981;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            font-weight: 600;
+            animation: slideIn 0.3s ease-out;
+            z-index: 1000;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        @media (max-width: 768px) {
+            .input-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✨ Content Forge</h1>
+            <p class="subtitle">Transform One Idea into Multi-Platform Content Magic</p>
+        </header>
+        
+        <div class="card">
+            <div class="input-section">
+                <div class="form-group">
+                    <label>💡 Your Topic or Idea</label>
+                    <input type="text" id="topic" placeholder="e.g., AI in healthcare, Remote work tips, Sustainable living..." />
+                </div>
+                
+                <div class="form-group">
+                    <label>🎨 Content Tone</label>
+                    <select id="tone">
+                        <option value="professional">Professional</option>
+                        <option value="casual">Casual</option>
+                        <option value="technical">Technical</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <button class="btn" onclick="generateContent()" id="generateBtn">
+                        🚀 Generate Content
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="statsSection" class="hidden">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalWords">0</div>
+                    <div class="stat-label">Total Words Generated</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Platforms Covered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="timeSaved">0</div>
+                    <div class="stat-label">Hours Saved</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="loadingSection" class="card hidden">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Crafting your content magic... ✨</p>
+            </div>
+        </div>
+        
+        <div id="resultsSection" class="hidden">
+            <div class="results-grid" id="resultsGrid"></div>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:3000' : '';
+        
+        const platformIcons = {
+            linkedin: '💼',
+            twitter: '🐦',
+            instagram: '📸',
+            blog: '📝',
+            email: '📧'
+        };
+        
+        async function generateContent() {
+            const topic = document.getElementById('topic').value.trim();
+            const tone = document.getElementById('tone').value;
+            
+            if (!topic) {
+                alert('Please enter a topic!');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loadingSection').classList.remove('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('statsSection').classList.add('hidden');
+            document.getElementById('generateBtn').disabled = true;
+            
+            try {
+                const response = await fetch(`${API_URL}/api/generate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topic, tone })
+                });
+                
+                const data = await response.json();
+                displayResults(data);
+            } catch (error) {
+                alert('Error generating content. Please try again.');
+                console.error(error);
+            } finally {
+                document.getElementById('loadingSection').classList.add('hidden');
+                document.getElementById('generateBtn').disabled = false;
+            }
+        }
+        
+        function displayResults(data) {
+            const resultsGrid = document.getElementById('resultsGrid');
+            resultsGrid.innerHTML = '';
+            
+            let totalWords = 0;
+            
+            Object.entries(data.results).forEach(([platform, result]) => {
+                const wordCount = result.content.split(/\s+/).length;
+                totalWords += wordCount;
+                
+                const card = document.createElement('div');
+                card.className = 'platform-card';
+                card.innerHTML = `
+                    <div class="platform-header">
+                        <span class="platform-name">${platformIcons[platform]} ${platform}</span>
+                        <span class="platform-icon">${platformIcons[platform]}</span>
+                    </div>
+                    <div class="platform-meta">
+                        <div class="meta-item">
+                            <span>📊</span>
+                            <span>${wordCount} words</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>📏</span>
+                            <span>${result.metadata.length} / ${result.metadata.maxLength} chars</span>
+                        </div>
+                        <div class="meta-item">
+                            <span>🎨</span>
+                            <span>${result.metadata.style}</span>
+                        </div>
+                    </div>
+                    <div class="content-box" id="content-${platform}">${result.content}</div>
+                    <div class="action-buttons">
+                        <button class="btn-small btn-copy" onclick="copyContent('${platform}')">
+                            📋 Copy
+                        </button>
+                        <button class="btn-small btn-download" onclick="downloadContent('${platform}', '${data.topic}')">
+                            💾 Download
+                        </button>
+                    </div>
+                `;
+                resultsGrid.appendChild(card);
+            });
+            
+            // Update stats
+            document.getElementById('totalWords').textContent = totalWords.toLocaleString();
+            document.getElementById('timeSaved').textContent = Math.round(totalWords / 200); // Assuming 200 words per hour
+            
+            // Show results
+            document.getElementById('resultsSection').classList.remove('hidden');
+            document.getElementById('statsSection').classList.remove('hidden');
+        }
+        
+        function copyContent(platform) {
+            const content = document.getElementById(`content-${platform}`).textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                showToast('✅ Copied to clipboard!');
+            });
+        }
+        
+        function downloadContent(platform, topic) {
+            const content = document.getElementById(`content-${platform}`).textContent;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${topic.replace(/\s+/g, '-')}-${platform}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('💾 Downloaded!');
+        }
+        
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+        
+        // Enter key to generate
+        document.getElementById('topic').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                generateContent();
+            }
+        });
+    </script>
+</body>
+</html>
